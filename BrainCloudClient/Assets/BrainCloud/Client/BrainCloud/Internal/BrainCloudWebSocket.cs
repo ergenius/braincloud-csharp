@@ -2,9 +2,7 @@
 namespace BrainCloud.Internal
 {
 	using System;
-#if DOT_NET
-using System.Net.WebSockets;
-#elif UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
 using AOT;
 using System.Collections.Generic;
 #else
@@ -14,8 +12,7 @@ using System.Collections.Generic;
 
 	public class BrainCloudWebSocket
 	{
-#if DOT_NET
-#elif UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
 	private NativeWebSocket NativeWebSocket;   
     private static Dictionary<int, BrainCloudWebSocket> webSocketInstances =
         new Dictionary<int, BrainCloudWebSocket>();
@@ -25,8 +22,8 @@ using System.Collections.Generic;
 
 		public BrainCloudWebSocket(string url)
 		{
-#if DOT_NET
-#elif UNITY_WEBGL && !UNITY_EDITOR
+		//Console.WriteLine("In BRAINCLOUDWEBSOCKET");
+#if UNITY_WEBGL && !UNITY_EDITOR
 		NativeWebSocket = new NativeWebSocket(url);
 		NativeWebSocket.SetOnOpen(NativeSocket_OnOpen);
 		NativeWebSocket.SetOnMessage(NativeSocket_OnMessage);
@@ -45,8 +42,7 @@ using System.Collections.Generic;
 
 		public void Close()
 		{
-#if DOT_NET
-#elif UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
         if (NativeWebSocket == null)
 			return;
         webSocketInstances.Remove(NativeWebSocket.Id);
@@ -64,8 +60,7 @@ using System.Collections.Generic;
 #endif
 		}
 
-#if DOT_NET
-#elif UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
     [MonoPInvokeCallback(typeof(Action<int>))]
 	public static void NativeSocket_OnOpen(int id) {
 	
@@ -101,8 +96,8 @@ using System.Collections.Generic;
 #else
 		private void WebSocket_OnOpen(object sender, EventArgs e)
 		{
-#if DOT_NET
-#elif UNITY_WEBGL && !UNITY_EDITOR
+			//Console.WriteLine("WEBSOCKET_ ON OPEN");
+#if UNITY_WEBGL && !UNITY_EDITOR
 #else
 			WebSocket.TCPClient.NoDelay = true;
 			WebSocket.TCPClient.Client.NoDelay = true;
@@ -119,12 +114,14 @@ using System.Collections.Generic;
 
 		private void WebSocket_OnError(object sender, ErrorEventArgs e)
 		{
+			//Console.WriteLine("WEBSOCKET_ ON ERROR");
 			if (OnError != null)
 				OnError(this, e.Message);
 		}
 
 		private void WebSocket_OnClose(object sender, CloseEventArgs e)
 		{
+			//Console.WriteLine("WEBSOCKET_ ON CLOSE");
 			if (OnClose != null)
 				OnClose(this, e.Code, e.Reason);
 		}
@@ -132,8 +129,8 @@ using System.Collections.Generic;
 
 		public void SendAsync(byte[] packet)
 		{
-#if DOT_NET
-#elif UNITY_WEBGL && !UNITY_EDITOR
+		//Console.WriteLine("Sending packet " + packet);
+#if UNITY_WEBGL && !UNITY_EDITOR
     	NativeWebSocket.SendAsync(packet);
 #else
 			WebSocket.SendAsync(packet, null);
@@ -142,8 +139,8 @@ using System.Collections.Generic;
 
 		public void Send(byte[] packet)
 		{
-#if DOT_NET
-#elif UNITY_WEBGL && !UNITY_EDITOR
+		//Console.WriteLine("Sending Packet " + packet);
+#if UNITY_WEBGL && !UNITY_EDITOR
     	NativeWebSocket.SendAsync(packet);
 #else
 			WebSocket.Send(packet);

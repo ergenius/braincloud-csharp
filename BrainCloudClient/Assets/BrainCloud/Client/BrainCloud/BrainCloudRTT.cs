@@ -3,6 +3,9 @@
 // Copyright 2016 bitHeads, inc.
 //----------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+
 namespace BrainCloud
 {
 
@@ -184,6 +187,7 @@ using BrainCloud.Internal;
         /// </summary>
         public void RequestClientConnection(  SuccessCallback success = null, FailureCallback failure = null,  object cbObject = null)
         {
+            Console.WriteLine("REQUESTING CONNECTION");
             ServerCallback callback = BrainCloudClient.CreateServerCallback(success, failure, cbObject);
             ServerCall sc = new ServerCall(ServiceName.RTTRegistration, ServiceOperation.RequestClientConnection, null, callback);
                 m_clientRef.SendRequest(sc);
