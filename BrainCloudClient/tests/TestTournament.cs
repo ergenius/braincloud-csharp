@@ -165,11 +165,12 @@ namespace BrainCloudTests
 
             TestResult tr = new TestResult(_bc);
 
+            //add a quarter of a day so it lands within tournament schedule
             _bc.TournamentService.PostTournamentScoreWithResults(
                 _leaderboardId,
                 _rand.Next(1000),
                 null,
-                DateTime.UtcNow,
+                System.DateTime.Now.AddDays(0.25),
                 BrainCloudSocialLeaderboard.SortOrder.HIGH_TO_LOW,
                 10,
                 10,
